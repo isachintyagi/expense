@@ -2,7 +2,7 @@ const dbLimits = require('../models/monthlyLimit')
 const val = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
 
 exports.setLimit = (req, res) => {
-    if (!req.body.year || !req.body.month || !req.body.amount) {
+    if (!req.body.amount) {
         res.json({
             success: false,
             msg: "Please provide all details."
@@ -17,22 +17,12 @@ exports.setLimit = (req, res) => {
                     success: false,
                     msg: "Server Error. Please try agian after some time."
                 })
-            } else if (val.indexOf(parseInt(req.body.month)) == -1) {
-                res.json({
-                    success: false,
-                    msg: "Invalid month provided."
-                })
-            } else if (req.body.year < currentYear || req.body.month < currentMonth) {
-                res.json({
-                    success: false,
-                    msg: "You can't set limit for previous months."
-                })
             } else if (!limits || limits == null) {
                 new dbLimits({
                     email: req.decoded.email,
                     limits: [{
-                        month: req.body.month,
-                        year: req.body.year,
+                        month: currentMonth,
+                        year: currentYear,
                         amount: req.body.amount
                     }]
                 }).save((err, saved) => {
@@ -51,7 +41,7 @@ exports.setLimit = (req, res) => {
             } else {
                 let exists = false;
                 limits.limits.length == 0 ? console.log("Not exists") : limits.limits.forEach(element => {
-                    if (element.year == req.body.year && element.month == req.body.month)
+                    if (element.year == currentYear && element.month == currentMonth)
                         exists = true
                 });
                 if (exists) {
@@ -61,8 +51,8 @@ exports.setLimit = (req, res) => {
                     })
                 } else {
                     let lim = {
-                        month: req.body.month,
-                        year: req.body.year,
+                        month: currentMonth,
+                        year: currentYear,
                         amount: req.body.amount
                     }
                     dbLimits.findOneAndUpdate({ email: req.decoded.email }, { $push: { limits: lim } }, (err, updated) => {
@@ -88,23 +78,13 @@ exports.updateLimit = (req, res) => {
     let todayDate = new Date(),
         currentMonth = todayDate.getMonth(),
         currentYear = todayDate.getFullYear()
-    if (!req.body.year || !req.body.month || !req.body.amount) {
+    if (!req.body.amount) {
         res.json({
             success: false,
             msg: "Please provide all details."
         })
-    } else if (val.indexOf(parseInt(req.body.month)) == -1) {
-        res.json({
-            success: false,
-            msg: "Invalid month provided."
-        })
-    } else if (req.body.year < currentYear || req.body.month < currentMonth) {
-        res.json({
-            success: false,
-            msg: "You can't set limit for previous months."
-        })
     } else {
-        dbLimits.findOneAndUpdate({ email: req.body.email, 'limits.year': req.body.year, 'limits.month': req.body.month }, { $set: { 'limits.$.amount': req.body.amount } }, (err, updated) => {
+        dbLimits.findOneAndUpdate({ email: req.body.email, 'limits.year': currentYear, 'limits.month': currentMonth }, { $set: { 'limits.$.amount': req.body.amount } }, (err, updated) => {
             if (err) {
                 res.json({
                     success: false,
