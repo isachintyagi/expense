@@ -8,6 +8,3 @@ RUN npm install
 
 CMD ["nodemon", "server.js"]
 
-FROM nginx
-EXPOSE 80
-COPY --from=builder /usr/app /user/share/nginx
