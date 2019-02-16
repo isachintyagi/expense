@@ -17,7 +17,12 @@ mongoose.connect(config.mongo_uri, { useNewUrlParser: true }, err => {
 
 const api = require('./routes/routes')
 app.use('/api', api)
-
+app.get('/ok', (req, res) => {
+    res.json({
+        success: true,
+        msg: "Passed"
+    })
+})
 
 app.listen(port, err => {
     if (!err) {
@@ -26,3 +31,4 @@ app.listen(port, err => {
         console.log("Error. Server not started.")
     }
 })
+module.exports = app;

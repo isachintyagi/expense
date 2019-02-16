@@ -3,7 +3,7 @@ services:
   - docker
 
 before_install: 
-  - echo "BEFORE INSTALL START"
-  - gem install bundler
-  - echo "BEFORE INSTALL END"
   - docker build -t rajatk31/expense -f Dockerfile.dev .
+
+script:
+  - docker run rajatk31/expense npm test
