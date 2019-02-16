@@ -7,3 +7,16 @@ before_install:
 
 script:
   - docker run rajatk31/expense npm test
+
+deploy:
+  provider: elasticbeanstalk
+  region: "us-east-1"
+  app: "docker-proj"
+  env: "DockerProj-env"
+  bucket_name: "elasticbeanstalk-us-east-1-714033327484"
+  bucket_path: "docker-proj"
+  on:
+    branch: master
+  access_key_id: $AWS_ACCESS_KEY
+  secret_access_key:
+    secure: "$AWS_SECRET_KEY"
