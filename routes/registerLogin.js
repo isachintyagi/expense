@@ -42,7 +42,7 @@ exports.register = (req, res) => {
                     } else {
                         res.json({
                             success: true,
-                            msg: "Registeration done."
+                            msg: "Registeration done..."
                         })
                     }
                 })
@@ -114,7 +114,7 @@ exports.login = (req, res) => {
                                     crypto.encrypt(req.app.get('cryptKey'), token).then(newToken => {
                                         res.json({
                                             success: true,
-                                            msg: "Login Successful",
+                                            msg: "Login Successful..",
                                             name: savedUser.name,
                                             photo: savedUser.image,
                                             test: { pending: false },
@@ -333,4 +333,4 @@ exports.login = (req, res) => {
         }
     }
 
-}
+} 

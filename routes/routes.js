@@ -10,7 +10,7 @@ router.post('/register', register.register)
 
 
 /**
- * Login using google or using email
+ * Login using google or using email h
  */
 router.post('/login', register.login)
 
