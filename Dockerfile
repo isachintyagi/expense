@@ -1,10 +1,9 @@
 FROM node:alpine as builder
-WORKDIR /usr/app
+WORKDIR '/app'
 COPY package.json .
-RUN npm i -g nodemon
-COPY ./ ./
+COPY . .
 RUN npm install
-CMD ["nodemon", "server.js"]
+CMD ["node", "server.js"]
 
-EXPOSE 80
+EXPOSE 8000
 
